@@ -1,0 +1,3 @@
+# Advent of Code 2025
+
+Going at it again in Go...
