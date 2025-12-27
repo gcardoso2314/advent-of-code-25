@@ -75,6 +75,12 @@ func sortPairs(pairs []*JBPair) {
 }
 
 func partOne(junctionBoxes []*JunctionBox, pairs []*JBPair, nConnections int) {
+	nBoxes := len(junctionBoxes)
+	circuitCounts := make([]int, nBoxes)
+	for i := range len(circuitCounts) {
+		circuitCounts[i]++
+	}
+
 	for i := range nConnections {
 		minPair := pairs[i]
 		// second pair will take number of first pair
@@ -83,19 +89,15 @@ func partOne(junctionBoxes []*JunctionBox, pairs []*JBPair, nConnections int) {
 		for _, jb := range junctionBoxes {
 			if jb.circuit == sourceCircuit {
 				jb.circuit = targetCircuit
+				circuitCounts[sourceCircuit]--
+				circuitCounts[targetCircuit]++
 			}
 		}
 	}
 
-	nBoxes := len(junctionBoxes)
-	circuits := make([]int, nBoxes)
-	for _, jb := range junctionBoxes {
-		circuits[jb.circuit] += 1
-	}
+	slices.Sort(circuitCounts)
 
-	slices.Sort(circuits)
-
-	result := circuits[nBoxes-3] * circuits[nBoxes-2] * circuits[nBoxes-1]
+	result := circuitCounts[nBoxes-3] * circuitCounts[nBoxes-2] * circuitCounts[nBoxes-1]
 	fmt.Printf("Solution for part one is: %d\n", result)
 }
 
